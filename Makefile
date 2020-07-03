@@ -1,8 +1,5 @@
 build: clean target copy dependencies target/cloudwatch_humio.zip
 
-clean:
-	rm -rf target/cloudwatch_humio.zip
-
 target:
 	mkdir -p target
 
