@@ -11,19 +11,21 @@ def setup():
     Sets up variables that should persists across Lambda invocations.
     """
     global humio_host
+    global humio_env
     global humio_protocol
     global humio_ingest_token
     global http_session
     global _is_setup
 
     humio_host = os.environ["humio_host"]
+    humio_env = os.environ["humio_env"]
     humio_protocol = os.environ["humio_protocol"]
     humio_ingest_token = os.environ["humio_ingest_token"]
     http_session = requests.Session()
     _is_setup = True
 
 
-def ingest_events(humio_events, host_type):
+def ingest_events(humio_events, humio_tags):
     """
     Wrap and send CloudWatch Logs/Metrics to Humio repository.
 
@@ -43,11 +45,11 @@ def ingest_events(humio_events, host_type):
     }
 
     # Prepare events to be sent to Humio.
-    wrapped_data = [{"tags": {"host": host_type}, "events": humio_events}]
+    wrapped_data = [{"tags": humio_tags}, "events": humio_events}]
 
     print("Data being sent to Humio: %s" % wrapped_data)
 
-    # Make request. 
+    # Make request.
     request = http_session.post(
         humio_url,
         data=json.dumps(wrapped_data),

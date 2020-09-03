@@ -68,7 +68,7 @@ def lambda_handler(event, context):
         })
 
     # Make request to Humio.
-    request = helpers.ingest_events(humio_events, 'cloudwatch_logs')
+    request = helpers.ingest_events(humio_events, {"#env": humio_env, "#type": "log"})
 
     response = request.text
 
