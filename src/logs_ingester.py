@@ -1,3 +1,4 @@
+import os
 import re
 import json
 import helpers
@@ -68,9 +69,7 @@ def lambda_handler(event, context):
         })
 
     # Make request to Humio.
-    request = helpers.ingest_events(humio_events, {"#env": humio_env, "#type": "log"})
-
-    response = request.text
+    request = helpers.ingest_events(humio_events, {"#env": os.environ["humio_env"], "#type": "log"})
 
     # Debug output.
-    print("Got response %s from Humio." % response)
+    print("Got response %s from Humio." % request.text)
